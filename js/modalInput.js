@@ -1,4 +1,4 @@
-
+var debug = true;
 
 /**
  * Name: 			modalInput.js
@@ -7,7 +7,7 @@
  * 
  */
 
-var minHtml = '<div id="modalBaseContainer"><div id="%modalInputId%" class="modal %vulcanoModalFade%" role="dialog" style=""> <div class="modal-dialog %vulcanoModalSize%"> <!-- Modal content--> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" style="color: red;">&times;</button> <h4 class="modal-title">%vulcanoModalHeader%</h4> </div> <div class="modal-body"> <div class="container-fluid"> %vulcanoModalHtml% </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary saveButton" data-dismiss="modal">%vulcanoModalSave%</button> <button type="button" class="btn btn-warning closeButton" data-dismiss="modal">%vulcanoModalClose%</button> </div> </div> </div></div></div>';
+var minHtml = '<div id="modalBaseContainer"><div id="%modalInputId%" class="modal %vulcanoModalFade%" role="dialog"> <div class="modal-dialog %vulcanoModalSize%"> <!-- Modal content--> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" style="color: red;">&times;</button> <h4 class="modal-title">%vulcanoModalHeader%</h4> </div> <div class="modal-body"> <div class="container-fluid"> %vulcanoModalHtml% </div> </div> <div class="modal-footer"> <button type="button" class="btn btn-primary saveButton">%vulcanoModalSave%</button> <button type="button" class="btn btn-warning closeButton" data-dismiss="modal">%vulcanoModalClose%</button> </div> </div> </div></div></div>';
 
 //var minHtml = '';
 //var minHtml = '';
@@ -52,7 +52,7 @@ var modalSizes = modalSizeSmall.concat(modalSizeLarge);
  * @param headerText: 	Text to be set in the header.
  * @param closeLabel: 	Text for the close button, default Cerrar.
  * @param saveLabel:    Text for save button, default Guardar.
- * @param saveOnClose:  Boolean, thar indicates if we should close the modal if the user decide to save, default true. 
+ * @param closeOnSave:  Boolean, thar indicates if we should close the modal if the user decide to save, default true. 
  */
 
 
@@ -73,6 +73,10 @@ modalInput.createModal = function(params){
 	modalInput.openModal(params); 
 	
 	$("html").append(modalInput.getModalHtml(params));
+	
+	modalInput.afterModalRender(params);
+	
+	
 	
 	
 	
@@ -117,6 +121,11 @@ modalInput.setDefaultValues = function(params){
 		params.html = "<h1>Hola Mundo</h1>";
 	}
 	
+	if(params.closeOnSave != false && !params.closeOnSave){
+		params.closeOnSave = true;
+	}
+	
+	
 	
 	
 	params.size = modalInput.getModalSize(params.size);
@@ -127,7 +136,12 @@ modalInput.setDefaultValues = function(params){
 
 modalInput.openModal = function(params){
 	
-console.log(params);
+	if(debug){
+		console.log("PARAMS");
+		console.log(params);
+	}
+	
+
 var modalTrigger = null;
 
 
@@ -137,8 +151,8 @@ var modalTrigger = null;
 		modalTrigger = $(params.selector);
 	}
 	
-	modalTrigger.on(params.event,function(){
-		$("#modalInputId").modal();
+	modalTrigger.on(params.event, function(){
+		$("#modalInputId").modal(params.options);
 	});
 	
 };
@@ -148,7 +162,9 @@ var modalTrigger = null;
 modalInput.getModalSize = function(modalSize){
 	
 	var sizeString ="";	
-	if(!!modalSize && !modalSizes.contains(modalSize, true)){	
+	
+	
+	if(!!modalSize && modalSizes.contains(modalSize, true)){	
 		if(modalSizeLarge.contains(modalSize, true)){
 			sizeString = "modal-lg";
 		}else{
@@ -161,6 +177,7 @@ modalInput.getModalSize = function(modalSize){
 
 
 modalInput.getModalHtml = function(params){
+	
 	
 	var modalBaseHtml = $("#modalBaseContainer").html(); 
 	
@@ -183,6 +200,16 @@ modalInput.getModalHtml = function(params){
 
 
 
+/**
+ * In this method we will set all the configuration necessary after the element had rendered.
+ */
+modalInput.afterModalRender = function(params){
+	
+	if(params.closeOnSave){
+		$(".saveButton").attr("data-dismiss", "modal");
+	}
+	
+};
 
 
 

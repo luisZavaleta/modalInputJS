@@ -43,8 +43,24 @@
 
 <script type="text/javascript">
 
+
+var params = {};
+
+//params.selector 
+//params.parent
+params.html = "<h3>HOLA XD</h3>";
+//params.event 
+params.size = "large"; 
+params.fade = false;
+params.options = {"keyboard": true} 
+params.headerText = "HEADER, BITCH";
+params.closeLabel = "close this shit";
+params.saveLabel = "save me";
+params.closeOnSave = true;
+
+
 $( document ).ready(function() {
-		modalInput.createModal(null);
+		modalInput.createModal(params);
 
 
 });
