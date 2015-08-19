@@ -45,6 +45,15 @@
 
 
 var params = {};
+var trigger = {};
+
+params.trigger = trigger;
+
+trigger.selector = ".testIt";
+//trigger.index =
+trigger.parent = "body";
+trigger.event = "dblclick";
+
 
 //params.selector 
 //params.parent
@@ -61,8 +70,6 @@ params.closeOnSave = true;
 
 $( document ).ready(function() {
 		modalInput.createModal(params);
-
-
 });
 
 
@@ -79,7 +86,7 @@ $( document ).ready(function() {
 
 <!-- Trigger the modal with a button -->
 <button type="button" class="btn btn-info btn-lg butonModal modalButton" >Open Modal</button>
-a
+<span class="testIt">aaaa</span>
 <!-- Modal -->
 <!-- 
 <div id="modalInputId" class="modal fade " role="dialog">

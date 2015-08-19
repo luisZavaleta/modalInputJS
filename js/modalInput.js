@@ -42,26 +42,30 @@ var modalSizes = modalSizeSmall.concat(modalSizeLarge);
 /**
  *  ============ CREATE THE MODAL AND SET THE ELEMENT THAT WILL TRIGER IT =========
  * 
- * @param selector: 	Jquery Selector of the element that will triger the modal window. default: modalButton.
- * @param parent: 		Parent Element thet contains the selector.
- * @param html: 		Html that will wi put in the body of the modal.
- * @param event: 		Event that will triger the modal, default "click"
- * @param size: 		Size o the modal, can be: lg, large, modal-lg, md, medium, modal-md, sm, small, modal-sm: default: md.
- * @param fade: 		Boolean, If false, modal just appears and dissapears.
- * @param options: 		JSON with modal options.
- * @param headerText: 	Text to be set in the header.
- * @param closeLabel: 	Text for the close button, default Cerrar.
- * @param saveLabel:    Text for save button, default Guardar.
- * @param closeOnSave:  Boolean, thar indicates if we should close the modal if the user decide to save, default true. 
+ * @param trigger:				JSON Containing the data of the element that will trigger the open of the modal window.
+ * @param trigger.selector:		Jquery Selector of the element that will triger the modal window. default: modalButton.
+ * @param trigger.parent:		Parent Element thet contains the selector.
+ * @param trigger.index:		Index of the element selector element, default is 0.
+ * @param trigger.event:		Event that will triger the modal, default "click"
+ * 
+ * @param html: 				Html that will wi put in the body of the modal.
+ * @param event: 				
+ * @param size:		 			Size o the modal, can be: lg, large, modal-lg, md, medium, modal-md, sm, small, modal-sm: default: md.
+ * @param fade: 				Boolean, If false, modal just appears and dissapears.
+ * @param options:		 		JSON with modal options.
+ * @param headerText: 			Text to be set in the header.
+ * @param closeLabel:		 	Text for the close button, default Cerrar.
+ * @param saveLabel:		    Text for save button, default Guardar.
+ * @param closeOnSave:		  	Boolean, thar indicates if we should close the modal if the user decide to save, default true. 
  */
 
 
 
 
-
-modalInput.createModal = function(params){
-	
-	
+/*
+ * Main method, create and configure the modalInput functionality
+ * */
+modalInput.createModal = function(params){	
 	
 	//Set hidden html to the document.	
 	
@@ -70,32 +74,44 @@ modalInput.createModal = function(params){
 	}
 	
 	params = modalInput.setDefaultValues(params);	
+	
 	modalInput.openModal(params); 
-	
-	$("html").append(modalInput.getModalHtml(params));
-	
-	modalInput.afterModalRender(params);
-	
-	
-	
-	
 	
 };
 
-
+/**
+ * Set default values if neccesary.
+ */
 modalInput.setDefaultValues = function(params){
 	
 	if(!params){
 		params = {};
 	}
 	
-	if(!params.selector){
-		params.selector = ".modalButton";
+
+
+	
+	if(!params.trigger){
+		
+		params.trigger = {};	
+		params.trigger.selector = ".modalButton";
+		params.trigger.event = "click";
+		
+	}else{
+			
+		if(!params.trigger.selector){
+			params.trigger.selector = ".modalButton";
+		}
+		
+		if(!params.trigger.event){
+			params.trigger.event = "click";
+		}	
+		
 	}
 	
-	if(!params.event){
-		params.event = "click";
-	}
+	
+	
+	
 	
 	if(!params.fade || params.fade){
 		params.fade = "fade";
@@ -134,6 +150,10 @@ modalInput.setDefaultValues = function(params){
 	
 };
 
+
+/*
+ * Open the modal window
+ * */
 modalInput.openModal = function(params){
 	
 	if(debug){
@@ -141,17 +161,16 @@ modalInput.openModal = function(params){
 		console.log(params);
 	}
 	
-
-var modalTrigger = null;
-
-
-	if(!!params.parent){	
-		modalTrigger = $(params.parent).children(params.selector);
-	}else{
-		modalTrigger = $(params.selector);
-	}
 	
-	modalTrigger.on(params.event, function(){
+
+	
+	modalInput.replaceModal(params);
+	
+
+
+	var triggerElement = getHtmlElement(params.trigger.selector, params.trigger.index, params.trigger.parent);
+
+	triggerElement.on(params.trigger.event, function(){
 		$("#modalInputId").modal(params.options);
 	});
 	
@@ -213,6 +232,13 @@ modalInput.afterModalRender = function(params){
 
 
 
+modalInput.replaceModal = function(params){
+	
+	$("#modalInputId").remove();
+	$("html").append(modalInput.getModalHtml(params));
+	modalInput.afterModalRender(params);
+	
+}; 
 
 
 
