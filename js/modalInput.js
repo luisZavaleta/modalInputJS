@@ -110,41 +110,49 @@ modalInput.setDefaultValues = function(params){
 	}
 	
 	
-	
-	
-	
-	if(!params.fade || params.fade){
-		params.fade = "fade";
+	if(!params.modal){
+		
+		params.modal = {};
+		params.modal.fade = "fade";
+		params.modal.options = {};
+		params.modal.closeLabel = "Cerrar";
+		params.modal.saveLabel = "Guardar";
+		params.modal.headerText = "Vulcano Modal Input";
+		params.modal.html = "<h1>Hola Mundo</h1>";
+		params.modal.closeOnSave = true;	
+		
+	}else{
+		
+		if(!params.modal.fade || params.modal.fade){
+			params.modal.fade = "fade";
+		}
+		
+		if(!params.modal.options){
+			params.modal.options = {};
+		}
+		
+		if(!params.modal.closeLabel){
+			params.modal.closeLabel = "Cerrar";
+		}
+		
+		if(!params.modal.saveLabel){
+			params.modal.saveLabel = "Guardar";
+		}
+		
+		if(!params.modal.headerText){
+			params.modal.headerText = "Vulcano Modal Input";
+		}
+		
+		if(!params.modal.html){
+			params.modal.html = "<h1>Hola Mundo</h1>";
+		}
+		
+		if(params.modal.closeOnSave != false && !params.modal.closeOnSave){
+			params.modal.closeOnSave = true;
+		}
 	}
 	
-	if(!params.options){
-		params.options = {};
-	}
-	
-	if(!params.closeLabel){
-		params.closeLabel = "Cerrar";
-	}
-	
-	if(!params.saveLabel){
-		params.saveLabel = "Guardar";
-	}
-	
-	if(!params.headerText){
-		params.headerText = "Vulcano Modal Input";
-	}
-	
-	if(!params.html){
-		params.html = "<h1>Hola Mundo</h1>";
-	}
-	
-	if(params.closeOnSave != false && !params.closeOnSave){
-		params.closeOnSave = true;
-	}
-	
-	
-	
-	
-	params.size = modalInput.getModalSize(params.size);
+	params.modal.size = modalInput.getModalSize(params.modal.size);
 	
 	return params;
 	
@@ -167,11 +175,11 @@ modalInput.openModal = function(params){
 	modalInput.replaceModal(params);
 	
 
-
-	var triggerElement = getHtmlElement(params.trigger.selector, params.trigger.index, params.trigger.parent);
+	var element = params.trigger.element;
+	var triggerElement = getHtmlElement(element.selector, element.index, element.parent);
 
 	triggerElement.on(params.trigger.event, function(){
-		$("#modalInputId").modal(params.options);
+		$("#modalInputId").modal(params.modal.options);
 	});
 	
 };
@@ -203,12 +211,12 @@ modalInput.getModalHtml = function(params){
 	modalBaseHtml = vulcanoUtil.template(modalBaseHtml, {	
 		
 		modalInputId : "modalInputId",
-		vulcanoModalFade: params.fade,
-		vulcanoModalSize: params.size,
-		vulcanoModalHeader: params.headerText,
-		vulcanoModalHtml: params.html,
-		vulcanoModalSave: params.saveLabel,
-		vulcanoModalClose: params.closeLabel
+		vulcanoModalFade: params.modal.fade,
+		vulcanoModalSize: params.modal.size,
+		vulcanoModalHeader: params.modal.headerText,
+		vulcanoModalHtml: params.modal.html,
+		vulcanoModalSave: params.modal.saveLabel,
+		vulcanoModalClose: params.modal.closeLabel
 		
 	});
 	
@@ -224,7 +232,7 @@ modalInput.getModalHtml = function(params){
  */
 modalInput.afterModalRender = function(params){
 	
-	if(params.closeOnSave){
+	if(params.modal.closeOnSave){
 		$(".saveButton").attr("data-dismiss", "modal");
 	}
 	

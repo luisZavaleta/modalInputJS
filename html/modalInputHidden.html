@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>Bootstrap-modal by jschr</title>
+  <title>Modal Input Example</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   
   
@@ -46,26 +46,32 @@
 
 var params = {};
 var trigger = {};
+var modal = {};
 
 params.trigger = trigger;
+var trigerElement = {};
+params.trigger.element = trigerElement;
 
-trigger.selector = ".testIt";
-//trigger.index =
-trigger.parent = "body";
-trigger.event = "dblclick";
+params.modal = modal;
 
 
-//params.selector 
-//params.parent
-params.html = "<h3>HOLA XD</h3>";
-//params.event 
-params.size = "large"; 
-params.fade = false;
-params.options = {"keyboard": true} 
-params.headerText = "HEADER, BITCH";
-params.closeLabel = "close this shit";
-params.saveLabel = "save me";
-params.closeOnSave = true;
+trigger.element.parent = "body";
+trigger.element.selector = ".testIt";
+trigger.element.index = 0;
+
+trigger.event = "click";
+
+modal.html = "<h3>HOLA XDsss</h3>";
+modal.size = "large"; 
+modal.fade = false;
+modal.options = {"keyboard": true} 
+modal.headerText = "HEADER, BITCdddddddddH";
+modal.closeLabel = "close this shit";
+modal.saveLabel = "save me";
+modal.closeOnSave = false;
+
+
+
 
 
 $( document ).ready(function() {
@@ -85,8 +91,14 @@ $( document ).ready(function() {
 
 
 <!-- Trigger the modal with a button -->
-<button type="button" class="btn btn-info btn-lg butonModal modalButton" >Open Modal</button>
-<span class="testIt">aaaa</span>
+
+<div class="row">
+	<div class="col-md-4">
+		<div class="testIt" >
+			<b style="margin-left:100px">Click to edit me!!!</b>
+		</div>
+	</div>	
+</div>	
 <!-- Modal -->
 <!-- 
 <div id="modalInputId" class="modal fade " role="dialog">
