@@ -176,5 +176,121 @@ JSON.htmlStringify = function(json) {
 
 
 
+//25 Agosto 2015
+
+/**
+ * Get data from a HTML page, it could get the value of an input, the html of a
+ * element or any attribute.
+ * 
+ * @selector: Jquery selector of the element
+ * @type: {value, html, or any attribute name}
+ */
+vulcanoUtil.getDataFromDOM = function(selector, type) {	
+	if(type == 'value' || type == 'val' || type == 'html'){	
+		return vulcanoUtil.getTextFromDOM(selector, type); 
+	}else{
+		return  $(selector).attr(type);
+	}
+};
+
+
+
+
+/**
+ * Set information to a HTML page, it could set the value of an input or the html of a
+ * contenteditable element.
+ * 
+ * @selector: Jquery selector of the element
+ * @type: {value, html}
+ * @value: Text to be setted
+ */
+vulcanoUtil.setTextToDOM = function(selector, type, value) {
+	
+	switch (type) {
+		case "value":
+		case "val":
+			$(selector).val(value);
+			break;
+		case "html":
+			$(selector).html(value);
+			break;
+		default:
+			throw "IllegalArgumentException---->" + type;
+
+	};
+	
+};
+
+
+
+
+/**
+ * Set data from a HTML page, it could get the value of an input, the html of a
+ * element or any attribute.
+ * 
+ * @selector: Jquery selector of the element
+ * @type: {value, html, or any attribute name}
+ * @value: Text to be setted
+ */
+vulcanoUtil.setDataToDOM = function(selector, type, value) {	
+	
+	if(type == 'value' || type == 'val' || type == 'html'){	
+		return vulcanoUtil.setTextToDOM(selector, type, value); 
+	}else{
+		return  $(selector).attr(type, value);
+	}	
+	
+};
+
+
+
+//Added August 3
+
+/**
+ * Replace  getHtmlElement(selector, index, parent)
+ * @param selectorOrElement: Can be a JSON with the element, index and paren as attributes o a selector. 
+ */
+vulcanoUtil.getHtmlElement = function(selectorOrElement, index, parent){
+	
+	var element = null;
+	var selector = null;
+	
+	if(vulcanoUtil.isJSON(selectorOrElement)){
+		index = selectorOrElement.index;
+		parent = selectorOrElement.parent;
+		selector = selectorOrElement.selector;
+	}else{
+		selector = selectorOrElement;
+	}
+	
+	if (!!index && !!parent) {
+		element = ($(parent).find(selector)).eq(index);
+	}else if (!!index) {
+		element = $(selector).eq(index);
+	}else if (!!parent) {
+		element = $(parent).find(selector);
+	}else{
+		element = $(selector);
+	}
+	
+	return element;
+	
+};
+
+
+
+
+/*
+ *Verify if a given values is a JSON Object
+ * */
+vulcanoUtil.isJSON = function(value){
+	
+	if(Object.prototype.toString.call(value) === '[object Object]'){
+		return true;
+	}
+	return false;
+	
+};
+
 
 

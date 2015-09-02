@@ -48,11 +48,27 @@ var params = {};
 var trigger = {};
 var modal = {};
 
-params.trigger = trigger;
+
+var from = {};
+
+
+var to = {};
+
+
+
+params.verbose = true;
+params.name = "Test one";
+
+params.trigger 	= 		trigger;
+params.modal 	= 		modal;
+params.from 	= 		from;
+params.to 		= 		to;
+
+
 var trigerElement = {};
 params.trigger.element = trigerElement;
 
-params.modal = modal;
+
 
 
 trigger.element.parent = "body";
@@ -61,7 +77,7 @@ trigger.element.index = 0;
 
 trigger.event = "click";
 
-modal.html = "<h3>HOLA XDsss</h3>";
+modal.html = '<div class="form-group form-group-lg"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div>';
 modal.size = "large"; 
 modal.fade = false;
 modal.options = {"keyboard": true} 
@@ -71,6 +87,31 @@ modal.saveLabel = "save me";
 modal.closeOnSave = false;
 
 
+from.element = {};
+from.element.parent = "body";
+from.element.selector = ".testIt b";
+from.element.index = 0;
+
+from.attribute = "html";
+from.prefix = "prefix--->";
+from.sufix = "<---sufix";
+
+
+to.element = {};
+to.element.selector =".modalInputElement";
+to.attribute = "val";
+to.prefix = "toOne P--->";
+to.sufix = "<---toOne S";
+
+
+
+
+
+var params2 = {};
+var modal2 = {};
+params2.modal = modal2;
+
+modal2.html = '<div class="form-group form-group-lg"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div>';
 
 
 
@@ -94,39 +135,13 @@ $( document ).ready(function() {
 
 <div class="row">
 	<div class="col-md-4">
-		<div class="testIt" >
+		<div class="testIt modalButton" >
 			<b style="margin-left:100px">Click to edit me!!!</b>
 		</div>
 	</div>	
 </div>	
-<!-- Modal -->
-<!-- 
-<div id="modalInputId" class="modal fade " role="dialog">
-  <div class="modal-dialog modal-lg">
 
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" style="color: red;">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-      	<div class="container-fluid">
-      	 <div class="row">
-            <div class="col-md-4"><p>Some text in the modal.</p></div>
-            <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
-          </div>
-      	</div>
-      </div>
-      <div class="modal-footer">
-      	<button type="button" class="btn btn-primary saveButton" data-dismiss="modal">Guardar</button>
-        <button type="button" class="btn btn-warning closeButton" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
 
-  </div>
-</div>
-
- -->
 
 
 

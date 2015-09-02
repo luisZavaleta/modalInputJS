@@ -1,4 +1,5 @@
 var debug = true;
+var verbose = false; // uset to print useful error messages in the controller.
 
 /**
  * Name: 			modalInput.js
@@ -42,6 +43,9 @@ var modalSizes = modalSizeSmall.concat(modalSizeLarge);
 /**
  *  ============ CREATE THE MODAL AND SET THE ELEMENT THAT WILL TRIGER IT =========
  * 
+ * @param verbose:				Indicates if we want log messages in the console.
+ * @param name:					Identifier for log messages.
+ * 
  * @param trigger:				JSON Containing the data of the element that will trigger the open of the modal window.
  * @param trigger.selector:		Jquery Selector of the element that will triger the modal window. default: modalButton.
  * @param trigger.parent:		Parent Element thet contains the selector.
@@ -84,23 +88,32 @@ modalInput.createModal = function(params){
  */
 modalInput.setDefaultValues = function(params){
 	
+	
+	if(params.verbose === true){
+		verbose = true;
+	}
+	
 	if(!params){
 		params = {};
 	}
 	
-
-
 	
 	if(!params.trigger){
 		
 		params.trigger = {};	
-		params.trigger.selector = ".modalButton";
+		params.trigger.element = {};
+		
+		params.trigger.element.selector = ".modalButton";
 		params.trigger.event = "click";
 		
 	}else{
+		
+		if(!params.trigger.element){
+			params.trigger.element = {};
+		}
 			
-		if(!params.trigger.selector){
-			params.trigger.selector = ".modalButton";
+		if(!params.trigger.element.selector){
+			params.trigger.element.selector = ".modalButton";
 		}
 		
 		if(!params.trigger.event){
@@ -154,8 +167,50 @@ modalInput.setDefaultValues = function(params){
 	
 	params.modal.size = modalInput.getModalSize(params.modal.size);
 	
-	return params;
+	//Verify that to and from elements exists.
+	if(!params.from){
+		throw "No 'from' attribute  was sette for Modal with name: "+ params.name;
+	}
 	
+	if(!params.to){
+		throw "No 'to' attribute  was sette for Modal with name: "+ params.name;
+	}
+	if(!params.to.element){
+		throw "No 'to.element' attribute  was sette for Modal with name: "+ params.name;
+	}
+	
+	//set from default values			 
+	if(!params.from.element){
+		params.from.element = params.trigger.element;
+	}
+				
+	if(!params.from.attribute){
+		params.from.attribute = "val";
+	}
+				
+	if(!params.from.prefix){
+		params.from.prefix = "";
+	}
+				
+	if(!params.from.sufix){
+		params.from.sufix = "";
+	}		
+	
+	//set to default values 
+	if(!params.to.attribute){
+		params.to.attribute = "val";
+	}
+					
+	if(!params.to.prefix){
+		params.to.prefix = "";
+	}
+					
+	if(!params.to.sufix){
+		params.to.sufix = "";
+	}
+	
+	return params;
+
 };
 
 
@@ -169,17 +224,18 @@ modalInput.openModal = function(params){
 		console.log(params);
 	}
 	
-	
-
-	
 	modalInput.replaceModal(params);
 	
-
 	var element = params.trigger.element;
 	var triggerElement = getHtmlElement(element.selector, element.index, element.parent);
 
 	triggerElement.on(params.trigger.event, function(){
 		$("#modalInputId").modal(params.modal.options);
+		
+		$('#modalInputId').on('shown.bs.modal', function (e) {
+			modalInput.afterOpenModal(params.from, params.to); 
+		});	
+		
 	});
 	
 };
@@ -239,7 +295,6 @@ modalInput.afterModalRender = function(params){
 };
 
 
-
 modalInput.replaceModal = function(params){
 	
 	$("#modalInputId").remove();
@@ -248,9 +303,27 @@ modalInput.replaceModal = function(params){
 	
 }; 
 
+modalInput.afterOpenModal = function(from, to){
+	
+	var data = modalInput.getFromData(from);
+	modalInput.setToData(to,data);
+	
+};
+
+modalInput.getFromData = function(from){
+
+	var element = vulcanoUtil.getHtmlElement(from.element);
+	var data = vulcanoUtil.getDataFromDOM(element, from.attribute);
+
+	return from.prefix + data+ from.sufix;
+	
+};
 
 
-
-var params = {};
-
+modalInput.setToData = function(to, value){
+	
+	var element = vulcanoUtil.getHtmlElement(to.element);
+	vulcanoUtil.setDataToDOM(element, to.attribute, value);
+	
+};
 
