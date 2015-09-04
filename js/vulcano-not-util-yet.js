@@ -293,4 +293,57 @@ vulcanoUtil.isJSON = function(value){
 };
 
 
+/*
+ *Verify if a given values is a JSON Object
+ * */
+vulcanoUtil.isArray = function(value){
+	
+	if(Object.prototype.toString.call(value) === '[object Array]'){
+		return true;
+	}
+	return false;
+	
+};
+
+
+
+
+
+
+/**
+ *
+ * Set a unique class identifier to the fromElement and add that identifier as an attribute to the toElement.
+ *
+ * @param fromElement: Element that will have the unique identifier.
+ * @param toElement: Element that will have the new attribute, the attribute value will be the indetifier.
+ * @param attributeName: Name of the attribute that will be setted in the toElement.
+ * 
+ * 
+ * 
+ */
+vulcanoUtil.generateUniqueClassIdentifier = function(fromElement, toElement, attributeName){
+	
+	var uniqueClass = (Date.now()).toString(32) + "" + vulcanoUtil.rand(10000) ;
+	
+	$(fromElement).addClass(uniqueClass);
+	$(toElement).attr(attributeName, uniqueClass);	
+	
+	return uniqueClass;
+	
+};
+
+
+/**
+ * Wrapper over Math.rand() to return a specific number of digits
+ */
+vulcanoUtil.rand = function(maxValue){
+	return (Math.ceil(Math.random() * maxValue));
+};
+
+
+
+
+
+
+
 

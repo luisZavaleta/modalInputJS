@@ -167,52 +167,60 @@ modalInput.setDefaultValues = function(params){
 	
 	params.modal.size = modalInput.getModalSize(params.modal.size);
 	
-	//Verify that to and from elements exists.
-	if(!params.from){
-		throw "No 'from' attribute  was sette for Modal with name: "+ params.name;
+	
+	var elements = params.elements;
+	
+	
+	if(!elements){
+		throw "No 'elements' attribute  was sette for Modal with name: "+ params.name;	
+	}else if(!vulcanoUtil.isArray(elements)  || elements.length < 1 ){
+		throw "'Elements' attribute  should be a non-empty array: "+ params.name;	
 	}
 	
-	if(!params.to){
-		throw "No 'to' attribute  was sette for Modal with name: "+ params.name;
-	}
-	if(!params.to.element){
-		throw "No 'to.element' attribute  was sette for Modal with name: "+ params.name;
-	}
 	
-	//set from default values			 
-	if(!params.from.element){
-		params.from.element = params.trigger.element;
-	}
-				
-	if(!params.from.attribute){
-		params.from.attribute = "val";
-	}
-				
-	if(!params.from.prefix){
-		params.from.prefix = "";
-	}
-				
-	if(!params.from.sufix){
-		params.from.sufix = "";
-	}		
+	if(elements.length == 1 && !elements[0].from.element){
+		
+		// If no from setted and only one element in te array, then the triger element is used as the from element.
+		elements[0].from.element  = params.trigger.element;	
+	};	
 	
-	//set to default values 
-	if(!params.to.attribute){
-		params.to.attribute = "val";
-	}
-					
-	if(!params.to.prefix){
-		params.to.prefix = "";
-	}
-					
-	if(!params.to.sufix){
-		params.to.sufix = "";
-	}
+	
+	for(var i = 0; i < elements.length; i++){
+		
+		
+		
+		if(!elements[i].from.attribute){
+			elements[i].from.attribute = "val";
+		}
+		
+		if(!elements[i].to.attribute){
+			elements[i].to.attribute = "val";
+		}
+		
+		//substitute for an ampty string to avoid undefined errors.
+		if(!elements[i].from.prefix){
+			elements[i].from.prefix = "";
+		}
+		
+		if(!elements[i].from.sufix){
+			elements[i].from.sufix = "";
+		}		
+		
+		if(!elements[i].to.prefix){
+			elements[i].to.prefix = "";
+		}
+		
+		if(!elements[i].to.sufix){
+			elements[i].to.sufix = "";
+		}
+		
+		
+	};
+	
 	
 	return params;
 
 };
-
 
 /*
  * Open the modal window
@@ -233,7 +241,9 @@ modalInput.openModal = function(params){
 		$("#modalInputId").modal(params.modal.options);
 		
 		$('#modalInputId').on('shown.bs.modal', function (e) {
-			modalInput.afterOpenModal(params.from, params.to); 
+			
+			
+			modalInput.afterOpenModal(params.elements); 
 		});	
 		
 	});
@@ -303,10 +313,25 @@ modalInput.replaceModal = function(params){
 	
 }; 
 
-modalInput.afterOpenModal = function(from, to){
+modalInput.afterOpenModal = function(elements){
 	
-	var data = modalInput.getFromData(from);
-	modalInput.setToData(to,data);
+	
+	for(var i = 0; i< elements.length; i++){
+		var element = elements[i];
+		var data = modalInput.getFromData(element.from);
+		modalInput.setToData(element.to,data);	
+		
+	};
+	
+
+	/*
+	var backElement = null;
+	
+	if(!!back){
+		back = from; 
+	}
+	
+	modalInput.generateUniqueIdentifiers(backElement); */
 	
 };
 
@@ -326,4 +351,36 @@ modalInput.setToData = function(to, value){
 	vulcanoUtil.setDataToDOM(element, to.attribute, value);
 	
 };
+
+/**
+ * Generate dynamic class and add it to the elements, add new attribute to the json with this identifier.
+ */
+modalInput.generateUniqueIdentifiers = function(fromElement, toElement, backElement){	
+
+	var identifiers = {};
+	
+	var attributeHolderElement = $(".modal-content");
+	identifiers.back = vulcanoUtil.generateUniqueClassIdentifier(toElement, attributeHolderElement, "data-back");
+	$(toElement).attr("data-attribute", backElement.attribute);	
+	$(toElement).attr("data-prefix", backElement.attribute);	
+	
+	
+	
+	//agregar element-size si es multiple, 
+	
+	return identifiers;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
 

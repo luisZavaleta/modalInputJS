@@ -54,15 +54,17 @@ var from = {};
 
 var to = {};
 
+var elements = [];
+
 
 
 params.verbose = true;
 params.name = "Test one";
 
-params.trigger 	= 		trigger;
-params.modal 	= 		modal;
-params.from 	= 		from;
-params.to 		= 		to;
+params.trigger 	= trigger;
+params.modal 	= modal;
+params.elements = elements;
+
 
 
 var trigerElement = {};
@@ -87,25 +89,37 @@ modal.saveLabel = "save me";
 modal.closeOnSave = false;
 
 
-from.element = {};
-from.element.parent = "body";
-from.element.selector = ".testIt b";
-from.element.index = 0;
 
-from.attribute = "html";
-from.prefix = "prefix--->";
-from.sufix = "<---sufix";
+var element0 = {}
+var from0 = {}
+var to0 = {};
+
+element0.from = {}
+element0.to ={}
+
+elements.push(element0);
+
+element0.from.element = {};
+element0.from.element.parent = "body";
+element0.from.element.selector = ".testIt b";
+element0.from.element.index = 0;
+
+element0.from.attribute = "html";
+element0.from.prefix = "prefix--->";
+element0.from.sufix = "<---sufix";
 
 
-to.element = {};
-to.element.selector =".modalInputElement";
-to.attribute = "val";
-to.prefix = "toOne P--->";
-to.sufix = "<---toOne S";
+
+
+element0.to.element = {};
+element0.to.element.selector =".modalInputElement";
+element0.to.attribute = "val";
+element0.to.prefix = "toOne P--->";
+element0.to.sufix = "<---toOne S";
 
 
 
-
+/*
 
 var params2 = {};
 var modal2 = {};
@@ -113,7 +127,7 @@ params2.modal = modal2;
 
 modal2.html = '<div class="form-group form-group-lg"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div>';
 
-
+*/
 
 $( document ).ready(function() {
 		modalInput.createModal(params);
