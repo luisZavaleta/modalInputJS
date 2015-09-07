@@ -339,6 +339,10 @@ modalInput.getFromData = function(from){
 
 	var element = vulcanoUtil.getHtmlElement(from.element);
 	var data = vulcanoUtil.getDataFromDOM(element, from.attribute);
+	
+	if(!!data){
+		data = data.trim();
+	}
 
 	return from.prefix + data+ from.sufix;
 	

@@ -79,7 +79,8 @@ trigger.element.index = 0;
 
 trigger.event = "click";
 
-modal.html = '<div class="form-group form-group-lg"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div>';
+modal.html = '<div><div class="form-group form-group-lg"><div class="row"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div><div class="row"><label class="col-sm-2 control-label" for="formGroupInputLarge">Label YYY</label><div class="col-sm-10"><input class="form-control modalInputElement2" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div></div></div></div>';
+
 modal.size = "large"; 
 modal.fade = false;
 modal.options = {"keyboard": true} 
@@ -97,7 +98,17 @@ var to0 = {};
 element0.from = {}
 element0.to ={}
 
+
+var element1 = {}
+var from1 = {}
+var to1 = {};
+
+element1.from = {}
+element1.to ={}
+
+
 elements.push(element0);
+elements.push(element1);
 
 element0.from.element = {};
 element0.from.element.parent = "body";
@@ -108,14 +119,30 @@ element0.from.attribute = "html";
 element0.from.prefix = "prefix--->";
 element0.from.sufix = "<---sufix";
 
-
-
-
 element0.to.element = {};
 element0.to.element.selector =".modalInputElement";
 element0.to.attribute = "val";
 element0.to.prefix = "toOne P--->";
 element0.to.sufix = "<---toOne S";
+
+
+
+
+element1.from.element = {};
+element1.from.element.parent = "body";
+element1.from.element.selector = ".second";
+element1.from.element.index = 0;
+
+element1.from.attribute = "html";
+element1.from.prefix = "pre--->";
+element1.from.sufix = "<---su";
+
+element1.to.element = {};
+element1.to.element.selector =".modalInputElement2";
+element1.to.attribute = "val";
+element1.to.prefix = "toOne P--->";
+element1.to.sufix = "<---toOne S";
+
 
 
 
@@ -152,10 +179,22 @@ $( document ).ready(function() {
 		<div class="testIt modalButton" >
 			<b style="margin-left:100px">Click to edit me!!!</b>
 		</div>
+		<div class="second">
+			Segundo elemento.
+		</div>
 	</div>	
 </div>	
 
-
+<div>
+	<div class="form-group form-group-lg">
+		<div class="row">
+			<label class="col-sm-2 control-label" for="formGroupInputLarge">Label XXX</label><div class="col-sm-10"><input class="form-control modalInputElement" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div>
+		</div>
+		<div class="row">
+			<label class="col-sm-2 control-label" for="formGroupInputLarge">Label YYY</label><div class="col-sm-10"><input class="form-control modalInputElement2" type="text" id="formGroupInputLarge" placeholder="Placeholder"></div>
+		</div>
+	</div>
+</div>
 
 
 
