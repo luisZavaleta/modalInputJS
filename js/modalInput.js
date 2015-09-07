@@ -80,6 +80,9 @@ modalInput.createModal = function(params){
 	params = modalInput.setDefaultValues(params);	
 	
 	modalInput.openModal(params); 
+	modalInput.save();
+	modalInput.close();
+	
 	
 };
 
@@ -242,7 +245,8 @@ modalInput.openModal = function(params){
 		
 		$('#modalInputId').on('shown.bs.modal', function (e) {
 			
-			
+			console.log("AAA");
+			console.log(JSON.stringify(params.elements));
 			modalInput.afterOpenModal(params.elements); 
 		});	
 		
@@ -316,12 +320,34 @@ modalInput.replaceModal = function(params){
 modalInput.afterOpenModal = function(elements){
 	
 	
+	var editedElementIds = "";
+	
 	for(var i = 0; i< elements.length; i++){
 		var element = elements[i];
-		var data = modalInput.getFromData(element.from);
-		modalInput.setToData(element.to,data);	
+		
+		
+		var fromElement  = vulcanoUtil.getHtmlElement(element.from.element);
+		var toElement = vulcanoUtil.getHtmlElement(element.to.element);
+		
+		var data = modalInput.getFromData(element.from, fromElement);
+		
+		modalInput.setToData(element.to, data, toElement);	
+		
+		
+		var fromId	=  	vulcanoUtil.getId(fromElement);	
+		var toId 	= 	vulcanoUtil.getId(toElement);
+		
+		element.from.id = fromId;
+		element.to.id = toId;
+
+		
+		modalInput.addAttributes(element);
+		
+		
 		
 	};
+	
+
 	
 
 	/*
@@ -330,14 +356,25 @@ modalInput.afterOpenModal = function(elements){
 	if(!!back){
 		back = from; 
 	}
-	
-	modalInput.generateUniqueIdentifiers(backElement); */
+	*/
+
 	
 };
 
-modalInput.getFromData = function(from){
 
-	var element = vulcanoUtil.getHtmlElement(from.element);
+/*
+ * get data
+ * */
+
+modalInput.getFromData = function(from, fromElement){
+	var element = null;	
+	
+	if(!!fromElement){
+		element = fromElement;
+	}else{
+		element = vulcanoUtil.getHtmlElement(from.element);
+	}
+
 	var data = vulcanoUtil.getDataFromDOM(element, from.attribute);
 	
 	if(!!data){
@@ -349,9 +386,16 @@ modalInput.getFromData = function(from){
 };
 
 
-modalInput.setToData = function(to, value){
+modalInput.setToData = function(to, value, toElement){
 	
-	var element = vulcanoUtil.getHtmlElement(to.element);
+	var element = null;
+	
+	if(!toElement){
+		element = toElement;
+	}else{
+		element =  vulcanoUtil.getHtmlElement(to.element);
+	}
+	
 	vulcanoUtil.setDataToDOM(element, to.attribute, value);
 	
 };
@@ -359,21 +403,44 @@ modalInput.setToData = function(to, value){
 /**
  * Generate dynamic class and add it to the elements, add new attribute to the json with this identifier.
  */
-modalInput.generateUniqueIdentifiers = function(fromElement, toElement, backElement){	
-
-	var identifiers = {};
+modalInput.addAttributes = function(element){	
 	
-	var attributeHolderElement = $(".modal-content");
-	identifiers.back = vulcanoUtil.generateUniqueClassIdentifier(toElement, attributeHolderElement, "data-back");
-	$(toElement).attr("data-attribute", backElement.attribute);	
-	$(toElement).attr("data-prefix", backElement.attribute);	
+	var from = element.from;
+	var to = element.to;
 	
+	var toSelector = "#"+to.id;
 	
-	
-	//agregar element-size si es multiple, 
-	
-	return identifiers;
+	$(toSelector).attr("data-to-attribute",to.attribute);
+	$(toSelector).attr("data-to-prefix",to.prefix);
+	$(toSelector).attr("data-to-sufix",to.sufix);
+	$(toSelector).attr("data-from-id",from.id);
+	$(toSelector).attr("data-from-attribute",from.attribute);
 };
+
+
+
+
+
+
+modalInput.save = function(){
+	
+	$(".saveButton").on("click", function(){
+			alert("save");
+	});
+};
+
+
+
+modalInput.close = function(){
+	
+
+	$(".closeButton").on("click", function(){
+		alert("close");
+	});
+};
+
+
+
 
 
 

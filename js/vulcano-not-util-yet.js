@@ -306,10 +306,6 @@ vulcanoUtil.isArray = function(value){
 };
 
 
-
-
-
-
 /**
  *
  * Set a unique class identifier to the fromElement and add that identifier as an attribute to the toElement.
@@ -323,7 +319,7 @@ vulcanoUtil.isArray = function(value){
  */
 vulcanoUtil.generateUniqueClassIdentifier = function(fromElement, toElement, attributeName){
 	
-	var uniqueClass = (Date.now()).toString(32) + "" + vulcanoUtil.rand(10000) ;
+	var uniqueClass = vulcanoUtil.generateUUID() ;
 	
 	$(fromElement).addClass(uniqueClass);
 	$(toElement).attr(attributeName, uniqueClass);	
@@ -331,6 +327,13 @@ vulcanoUtil.generateUniqueClassIdentifier = function(fromElement, toElement, att
 	return uniqueClass;
 	
 };
+
+
+
+
+
+
+
 
 
 /**
@@ -341,8 +344,58 @@ vulcanoUtil.rand = function(maxValue){
 };
 
 
+/*Generates a uuid with a given length
+ * http://jsfiddle.net/snj9enbg/1/
+ * */
+vulcanoUtil.generateUUID = function(len) {
+	
+    var xxx ="xxxxxxxxxyxxxxxxxxxyxxxxxxxxxyxxxxxxxxxyxxxxxxxxxy";
+    
+    xxx = vulcanoUtil.getStringWithMinLenght(xxx, len);
+    xxx = xxx.substring(0,len);
+    
+    var d = new Date().getTime();
+    var uuid = xxx.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+    });
+    return uuid;
+};
+
+/*
+ * returns a string with a minumun length
+ * 
+ * http://jsfiddle.net/snj9enbg/1/
+ * */
+vulcanoUtil.getStringWithMinLenght = function(str, len){
+
+    if(str.length > len){
+    	return str;
+    }else{
+    return  vulcanoUtil.getStringWithMinLenght(str + str, len);
+    }
+   
+};
 
 
+
+
+/*
+ * Return id of a element, it it doesn't have one, set one auto generated id to the element and return it.
+ * */
+vulcanoUtil.getId = function(element){
+	
+	var uuid = $(element).attr("id");
+	
+	if(!uuid){
+		uuid = vulcanoUtil.generateUUID(21);
+		$(element).attr("id", uuid);	
+	}
+	
+	return uuid;
+	
+};
 
 
 
