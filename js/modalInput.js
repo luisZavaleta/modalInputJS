@@ -341,23 +341,13 @@ modalInput.afterOpenModal = function(elements){
 		element.to.id = toId;
 
 		
-		modalInput.addAttributes(element);
-		
-		
-		
+		if(i != 0 ){
+			editedElementIds +=  ";";
+		}
+		editedElementIds += modalInput.addAttributes(element);	
 	};
 	
-
-	
-
-	/*
-	var backElement = null;
-	
-	if(!!back){
-		back = from; 
-	}
-	*/
-
+	$(".modal-content").attr("data-elements-ids", editedElementIds);
 	
 };
 
@@ -402,6 +392,8 @@ modalInput.setToData = function(to, value, toElement){
 
 /**
  * Generate dynamic class and add it to the elements, add new attribute to the json with this identifier.
+ * 
+ * @return:  The selector that will be used as attribute holder in the modal.
  */
 modalInput.addAttributes = function(element){	
 	
@@ -415,6 +407,9 @@ modalInput.addAttributes = function(element){
 	$(toSelector).attr("data-to-sufix",to.sufix);
 	$(toSelector).attr("data-from-id",from.id);
 	$(toSelector).attr("data-from-attribute",from.attribute);
+	
+	
+	return to.id;
 };
 
 
@@ -425,7 +420,40 @@ modalInput.addAttributes = function(element){
 modalInput.save = function(){
 	
 	$(".saveButton").on("click", function(){
-			alert("save");
+			
+		var elementsIds = $(".modal-content").attr("data-elements-ids");
+		
+		elementsIds = elementsIds.split(";");
+		
+		for(var i =0; i< elementsIds.length; i++){
+			
+			
+			var element = $("#"+elementsIds[i]);
+			
+			var toAttribute = element.attr("data-to-attribute");
+			var toPrefix = element.attr("data-to-prefix");
+			var toSufix = element.attr("data-to-sufix");
+			var fromId = element.attr("data-from-id");
+			var fromAttribute = element.attr("data-from-attribute");
+			
+
+			var toValue = "";
+			
+			if(!!toPrefix){
+				toValue += toPrefix;
+			}
+			
+			toValue +=vulcanoUtil.getDataFromDOM(element, toAttribute);
+			
+			if(!!toSufix){
+				toValue += toSufix;
+			}
+
+			vulcanoUtil.setDataToDOM("#"+fromId, fromAttribute, toValue);	
+		
+		}
+
+		
 	});
 };
 
