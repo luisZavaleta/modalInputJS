@@ -65,6 +65,30 @@ var modalSizes = modalSizeSmall.concat(modalSizeLarge);
 
 
 
+modalInput.modalInput = function(params){
+	
+	
+	if(vulcanoUtil.isArray(params)){
+		
+		for(var i = 0; i<params.length; i++){
+			
+			console.log("PARAM MULTIPLE ===>"+JSON.stringify(params[i]));
+			
+			modalInput.createModal(params[i]);
+		}
+		
+		
+	}else{
+		
+		modalInput.createModal(params);
+	}
+	
+	
+};
+
+
+
+
 
 /*
  * Main method, create and configure the modalInput functionality
@@ -73,16 +97,27 @@ modalInput.createModal = function(params){
 	
 	//Set hidden html to the document.	
 	
+	
+	//TODO:
+	
+
+	
+	modalInput.openModal(params); 
+
+	
+	
+};
+
+
+modalInput.addModalInput =   function addModalInput(params){
+	
+	
 	if(!$("#modalInputId")[0]){
 		$("html").append(minHtml);
 	}
+
 	
 	params = modalInput.setDefaultValues(params);	
-	
-	modalInput.openModal(params); 
-	modalInput.save();
-	modalInput.close();
-	
 	
 };
 
@@ -229,18 +264,24 @@ modalInput.setDefaultValues = function(params){
  * Open the modal window
  * */
 modalInput.openModal = function(params){
-	
-	if(debug){
-		console.log("PARAMS");
-		console.log(params);
-	}
-	
-	modalInput.replaceModal(params);
+
 	
 	var element = params.trigger.element;
 	var triggerElement = getHtmlElement(element.selector, element.index, element.parent);
 
 	triggerElement.on(params.trigger.event, function(){
+		
+		
+		modalInput.addModalInput(params);
+		
+		if(debug){
+			console.log("PARAMS");
+			console.log(params);
+		}
+		
+		modalInput.replaceModal(params);
+		
+		
 		$("#modalInputId").modal(params.modal.options);
 		
 		$('#modalInputId').on('shown.bs.modal', function (e) {
@@ -249,6 +290,9 @@ modalInput.openModal = function(params){
 			console.log(JSON.stringify(params.elements));
 			modalInput.afterOpenModal(params.elements); 
 		});	
+		
+		modalInput.save();
+		modalInput.close();
 		
 	});
 	
@@ -420,7 +464,8 @@ modalInput.addAttributes = function(element){
 modalInput.save = function(){
 	
 	$(".saveButton").on("click", function(){
-			
+		
+		alert("save");			
 		var elementsIds = $(".modal-content").attr("data-elements-ids");
 		
 		elementsIds = elementsIds.split(";");
