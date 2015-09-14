@@ -64,14 +64,17 @@ modalInput.modalInput = function(params){
 
 
 
-/*
+/**
  * Main method, create and configure the modalInput functionality
  * */
 modalInput.createModal = function(params){	
 	modalInput.openModal(params); 
 };
 
-
+/**
+ * Add modal Input html to the main document (just base html and hidden).
+  @param params
+ */
 modalInput.addModalInput =   function addModalInput(params){
 	if(!$("#modalInputId")[0]){
 		$("html").append(minHtml);
@@ -197,7 +200,6 @@ modalInput.openModal = function(params){
 			console.log("PARAMS");
 			console.log(params);
 		}
-		
 		modalInput.replaceModal(params);	
 		
 		$("#modalInputId").modal(params.modal.options);
@@ -207,18 +209,17 @@ modalInput.openModal = function(params){
 		});	
 		
 		modalInput.save();
-		modalInput.close();
-		
+		modalInput.close();	
 	});
-	
 };
 
-
-
+/**
+ * change any of the valid modal size attributes to  modal-lg, modal-sm or nothing for medium size, 
+ * if there isn't any valid atribute use medium by default (again, nothing means medium XD)
+ */
 modalInput.getModalSize = function(modalSize){
 	
 	var sizeString ="";	
-	
 	
 	if(!!modalSize && modalSizes.contains(modalSize, true)){	
 		if(modalSizeLarge.contains(modalSize, true)){
@@ -232,13 +233,13 @@ modalInput.getModalSize = function(modalSize){
 };
 
 
+/**
+ * Create a modal html and sett it to the dom document as hidden (modal compleatly created with some specific attributes)
+ * */
 modalInput.getModalHtml = function(params){
 	
-	
-	var modalBaseHtml = $("#modalBaseContainer").html(); 
-	
-	modalBaseHtml = vulcanoUtil.template(modalBaseHtml, {	
-		
+	var modalBaseHtml = $("#modalBaseContainer").html(); 	
+	modalBaseHtml = vulcanoUtil.template(modalBaseHtml, {		
 		modalInputId : "modalInputId",
 		vulcanoModalFade: params.modal.fade,
 		vulcanoModalSize: params.modal.size,
@@ -246,59 +247,50 @@ modalInput.getModalHtml = function(params){
 		vulcanoModalHtml: params.modal.html,
 		vulcanoModalSave: params.modal.saveLabel,
 		vulcanoModalClose: params.modal.closeLabel
-		
-	});
-	
-	
-	return modalBaseHtml;
-	
+	});	
+	return modalBaseHtml;	
 };
-
-
 
 /**
  * In this method we will set all the configuration necessary after the element had rendered.
  */
 modalInput.afterModalRender = function(params){
-	
 	if(params.modal.closeOnSave){
 		$(".saveButton").attr("data-dismiss", "modal");
 	}
-	
 };
 
-
-modalInput.replaceModal = function(params){
-	
+/**
+ * Delete old modal and create a new one that willl be used next.
+ */
+modalInput.replaceModal = function(params){	
 	$("#modalInputId").remove();
 	$("html").append(modalInput.getModalHtml(params));
-	modalInput.afterModalRender(params);
-	
+	modalInput.afterModalRender(params);	
 }; 
 
+/**
+ *Add element ids an attribute setted in the modal container (this ids will be used to know which elements need might contain changes)
+ */
 modalInput.afterOpenModal = function(elements){
-	
 	
 	var editedElementIds = "";
 	
 	for(var i = 0; i< elements.length; i++){
 		var element = elements[i];
-		
-		
+			
 		var fromElement  = vulcanoUtil.getHtmlElement(element.from.element);
 		var toElement = vulcanoUtil.getHtmlElement(element.to.element);
 		
 		var data = modalInput.getFromData(element.from, fromElement);
 		
 		modalInput.setToData(element.to, data, toElement);	
-		
-		
+				
 		var fromId	=  	vulcanoUtil.getId(fromElement);	
 		var toId 	= 	vulcanoUtil.getId(toElement);
 		
 		element.from.id = fromId;
 		element.to.id = toId;
-
 		
 		if(i != 0 ){
 			editedElementIds +=  ";";
@@ -307,15 +299,14 @@ modalInput.afterOpenModal = function(elements){
 	};
 	
 	$(".modal-content").attr("data-elements-ids", editedElementIds);
-	
 };
 
 
 /*
- * get data
+ * get data from Dom element, 
  * */
 
-modalInput.getFromData = function(from, fromElement, preProcessFunction){
+modalInput.getFromData = function(from, fromElement){
 	var element = null;	
 	
 	if(!!fromElement){
@@ -339,10 +330,11 @@ modalInput.getFromData = function(from, fromElement, preProcessFunction){
 	}
 
 	return  data;
-	
 };
 
-
+/**
+ * Set data do som element
+ */
 modalInput.setToData = function(to, value, toElement){
 	
 	var element = null;
@@ -353,8 +345,7 @@ modalInput.setToData = function(to, value, toElement){
 		element =  vulcanoUtil.getHtmlElement(to.element);
 	}
 	
-	vulcanoUtil.setDataToDOM(element, to.attribute, value);
-	
+	vulcanoUtil.setDataToDOM(element, to.attribute, value);	
 };
 
 /**
@@ -373,48 +364,33 @@ modalInput.addAttributes = function(element){
 	$(toSelector).attr("data-from-id",from.id);
 	$(toSelector).attr("data-from-attribute",from.attribute);
 	
-	
-	
-	
 	if(!!to.beforeSet && vulcanoUtil.isFunction(to.beforeSet)){	
 		postProcess[from.id] = to.beforeSet;
 	}
-	
-	
-	
-	
 	
 	return to.id;
 };
 
 
-
-
-
-
+/**
+ * On save button click, set data from modal to main wondow.
+ */
 modalInput.save = function(){
 	
 	$(".saveButton").on("click", function(){
-		
-		alert("save");			
+					
 		var elementsIds = $(".modal-content").attr("data-elements-ids");
 		
 		elementsIds = elementsIds.split(";");
 		
 		for(var i =0; i< elementsIds.length; i++){
-			
-			
-			var element = $("#"+elementsIds[i]);
-			
+				
+			var element = $("#"+elementsIds[i]);			
 			var toAttribute = element.attr("data-to-attribute");
-
 			var fromId = element.attr("data-from-id");
-			var fromAttribute = element.attr("data-from-attribute");
-			
-
+			var fromAttribute = element.attr("data-from-attribute");			
 			var toValue = "";
 			
-
 			toValue +=vulcanoUtil.getDataFromDOM(element, toAttribute);			
 	
 			var beforeSet = postProcess[fromId];
@@ -424,37 +400,17 @@ modalInput.save = function(){
 				toValue = beforeSet(toValue);
 			}
 			
-			vulcanoUtil.setDataToDOM("#"+fromId, fromAttribute, toValue);	
-		
-		}
-
-		
+			vulcanoUtil.setDataToDOM("#"+fromId, fromAttribute, toValue);			
+		}		
 	});
 };
 
 
-
+/**
+ * This function must be called Jon Snow, because it knows(does) nothing;  but will know something one day. 
+ */
 modalInput.close = function(){
-	
-
 	$(".closeButton").on("click", function(){
-		alert("close");
+		//alert("close");
 	});
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
