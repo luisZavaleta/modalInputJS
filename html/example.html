@@ -48,7 +48,19 @@
 var multipleParams = [];
 
 
+var testFunction = function(value){
+	return "HolaMundo=====>" + value
+}
 
+
+var testFunction2 = function(value){
+	return "Heyyy=====>" + value
+}
+
+
+var testFunction3 = function(value){
+	return "No me importa tu info";
+}
 
 var params = {};
 var trigger = {};
@@ -120,14 +132,12 @@ element0.from.element.selector = ".testIt b";
 element0.from.element.index = 0;
 
 element0.from.attribute = "html";
-element0.from.prefix = "prefix--->";
-element0.from.sufix = "<---sufix";
+element0.from.beforeSet = testFunction;
 
 element0.to.element = {};
 element0.to.element.selector =".modalInputElement";
 element0.to.attribute = "val";
-element0.to.prefix = "toOne P--->";
-element0.to.sufix = "<---toOne S";
+element0.to.beforeSet = testFunction2;
 
 
 
@@ -138,14 +148,12 @@ element1.from.element.selector = ".second";
 element1.from.element.index = 0;
 
 element1.from.attribute = "html";
-element1.from.prefix = "pre--->";
-element1.from.sufix = "<---su";
+element1.to.beforeSet = testFunction3;
+
 
 element1.to.element = {};
 element1.to.element.selector =".modalInputElement2";
 element1.to.attribute = "val";
-element1.to.prefix = "toOne P--->";
-element1.to.sufix = "<---toOne S";
 
 
 
@@ -283,7 +291,7 @@ $( document ).ready(function() {
 
 <!-- Trigger the modal with a button -->
 
-<div class="row">
+<div class="row" style="margin-left:150px">
 	<div class="col-md-4">
 		<div class="testIt modalButton" >
 			<b style="margin-left:100px">Click to edit me!!!</b>

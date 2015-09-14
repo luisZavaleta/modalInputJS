@@ -306,6 +306,22 @@ vulcanoUtil.isArray = function(value){
 };
 
 
+/*
+ *Verify if a given values is a function
+ * */
+vulcanoUtil.isFunction = function(value){
+	
+	if(Object.prototype.toString.call(value) === '[object Function]'){
+		return true;
+	}
+	return false;
+	
+};
+
+
+
+
+
 /**
  *
  * Set a unique class identifier to the fromElement and add that identifier as an attribute to the toElement.
