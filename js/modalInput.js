@@ -84,7 +84,7 @@ modalInput.addModalInput =   function addModalInput(params){
 };
 
 /**
- * Set default values if neccesary.
+ * Set default values if necessary.
  */
 modalInput.setDefaultValues = function(params){	
 	if(params.verbose === true){
